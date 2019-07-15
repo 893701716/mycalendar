@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Calendar</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        #top{
+            width: 700px;
+            height:50px;
+            position:relative;
+            color:darkorange;
+        }
+        #Calendar{
+            width: 700px;
+            height: 422px;
+            margin:100px auto;
+            padding-top:50px;
+            position: relative;
+        }
+        tr{
+            height: 58px;
+            text-align: center;
+            cursor: pointer;
+        }
+        td{
+            width: 100px;
+            background-color: beige;
+        }
+        #table{
+            boder:3px
+        }
+        #rowOne{
+            color:orange;
+        }
+        #yearAndMonth{
+            width: 100px;
+            height: 50px;
+            position: relative;
+            float:left;
+        }
+        #dynamicTime{
+            width: 100px;
+            height: 50px;
+            position: relative;
+            float: right;
+            text-align: center;
+            line-height: 50px;
+        }
+        #buttonArea{
+
+        }
+        #left{
+            display:inline-block;
+            width:0px;
+            height:0px;
+            border-left:0;
+            border-top:15px solid transparent;
+            border-right:20px solid #999;
+            border-bottom:15px solid transparent;
+            position:absolute;
+            left:30%;
+            top:20%;
+            cursor:pointer
+        }
+          #right{
+            display:inline-block;
+            width:0px;
+            height:0px;
+            border-right:0;
+            border-top:15px solid transparent;
+            border-left:20px solid #999;
+            border-bottom:15px solid transparent;
+            position:absolute;
+            right:30%;
+            top:20%;
+            cursor:pointer
+        }
+        #sheet{
+            width: 900px;
+            height: 1000px;
+            margin:100px auto;
+            background-color: aliceblue;
+        }
+        .externalDiv{
+            width: 600px;
+            height: 100px;
+            line-height: 100px;
+            text-align: left;
+            margin-left: 50px;
+            font-size: 20px;
+            font-weight: normal;
+        }
+        .input{
+            width: 500px;
+            height: 40px;
+            position:relative;
+            font-size:20px ;
+            justify-content: right;
+            margin-left: 20px;
+        }
+        #registerButton{
+            width: 80px;
+            height: 40px;
+            margin-left:50px;
+        }
+    </style>
+</head>
+<body>
+<div id ="Calendar">
+    <div id="top">
+        <div id="yearAndMonth"></div>
+    <div id="leftButton"></div>
+    <div id="rightButton"></div>
+        <div id="dynamicTime"></div>
+
+    </div>
+    <table id ="table">
+        <tr id="rowOne">
+            <td>日</td>
+            <td>一</td>
+            <td>二</td>
+            <td>三</td>
+            <td>四</td>
+            <td>五</td>
+            <td>六</td>
+        </tr>
+        <tr class="date">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="date">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="date">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="date">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="date">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="date">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+</div>
+<div id="buttonArea">
+    <div id="left"></div>
+    <div id="right"></div>
+</div>
+<!--<div id="sheet">-->
+<!--    <div id="name" class="externalDiv">姓名:<input type="text" id="input1" value="请输入你的姓名"class="input"></div>-->
+<!--    <div id="gender" class="externalDiv">性别:<input type="text" id="input2" value="请输入你的性别" class="input"></div>-->
+<!--     <div id="age" class="externalDiv">年龄:<input type="text" id="input3" value="请输入你的年龄" class="input"></div>-->
+<!--     <div id="major" class="externalDiv">班级:<input type="text" id="input4" value="请输入你的专业" class="input"></div>-->
+<!--    <button id="registerButton">-->
+<!--        点击注册-->
+<!--    </button>-->
+</div>
+<script>
+    window.onload=function(){
+        var date = new Date();
+        var y = date.getFullYear();
+        var m =date.getMonth()+1;
+        var day=date.getDate();
+        generateDate(y,m,day)
+        buttonEvents(y,m,day)
+    }
+// 蔡勒（Zeller）公式：w=y+[y/4]+[c/4]-2c+[26(m+1)/10]+d-1
+    function generateDate(y,m,day){
+        var Calendar =document.getElementById("Calendar")
+        var table =document.getElementById("table")
+        var td=document.getElementsByTagName("td")
+        var timer = setInterval(getDynamicTime,1000)
+        var  top=document.getElementById("top")
+        var  td =document.getElementsByTagName("td")
+        var yearAndMonth=document.getElementById("yearAndMonth")
+        var str=y+"年"+(m)+"月"
+        yearAndMonth.innerText=str
+        yearAndMonth.style.textAlign="center"
+        yearAndMonth.style.lineHeight="50px"
+        var ad=1 //定义一个变量 用来给日历排列天数
+        var allDays=getAllDaysInMonth(y,m)//返回月份对应的天数
+        var firstDayIsWeek=getWeekFromDay(y,m)//返回每个月第一天对应的星期数
+         firstDayIsWeek+=7 //加6的原因是 我这个表格代码td标签包含了周日到周六 不能从头遍历
+        for(var i=7;i<td.length;i++){
+           //This function is used to generating the table of given days in month.
+            if(i>=7 && i<(firstDayIsWeek)){
+                td[i].innerText=''
+            }
+            if(i>=firstDayIsWeek){
+                td[i].innerText=ad;
+                ad+=1;
+            }if(i>=(allDays+firstDayIsWeek)){
+                td[i].innerText=''
+            }
+            }
+         for(var i =0;i<td.length;i++)
+         //This function is used to setting the background of the table
+        {
+            if(day==td[i].innerText){
+                td[i].style.color="green"
+                td[i].style.fontWeight="bold"
+            }
+            if(i>6 && i!=td[i].innerText ){
+                td[i].onmouseover=function(){
+                this.style.backgroundColor="orange"
+            }
+                td[i].onmouseleave=function(){
+                this.style.backgroundColor="beige"
+            }
+            }
+        }
+    }
+    function isLeapYear(year){
+                    if (year %400==0 || year%4==0 && year%100!=0){
+                        return true
+                    }else{
+                        return false
+                        }
+                    }
+    function getAllDaysInMonth(y,m){
+        var allDays
+        if(m==1||m==3||m==5||m==7||m==8||m==10||m==12){
+                allDays=31
+        }else if(m==4||m==6||m==9||m==11){
+                allDays=30
+        }else{
+            if(isLeapYear (y)){
+                allDays=29
+            }else{
+                allDays=28
+            }
+        }
+        return allDays
+    }
+    function getWeekFromDay(y,m){
+        var y1=y%100,c=parseInt(y/100);
+        if(m==1||m==2){ //蔡勒公式计算到1月时应把1月份看作上一年的13月，计算到2月时应把2月份看作上一年的14月
+            m+=12
+            y1=y%100-1
+        }
+        var week=y1+parseInt((y1/4))+parseInt((c/4))-2*c+parseInt(26*(m+1)/10);
+        if(week<0){ //蔡勒公式有可能出现对7取模时负数的情况，百度给的方法是，让负数结果先加上一个7的倍数的数，变成正数这样不影响结果
+            week+=70;
+        }
+        var finalweek=week%7 //因为weeks算出来之后可能是负数所以 我又命名一个变量来作为最终对7取模后的星期数
+        return finalweek
+    }
+    function getDynamicTime(){
+        var dynamicTime=document.getElementById("dynamicTime")
+        var date = new Date();
+        var h =date.getHours();
+        var m=date.getMinutes();
+        var second=date.getSeconds()
+        if(m<10){
+            m="0"+m;
+        }
+        if(second<10){
+            second="0"+second
+        }
+        dynamicTime.innerText=h+":"+m+":"+second
+    }
+    //把这个日历程序基本写完花了整整一个下午的时间，。。。。。2019年4月28日晚
+    function buttonEvents(y,m,day) {
+        console.log(m)
+        var left = document.getElementById("left")
+        var right = document.getElementById("right")
+        day=undefined
+        left.onmousedown = function () {
+            m-=1;
+            if(m<=0){
+                y-=1;
+                m=12;
+            }
+            generateDate(y, m,day)
+
+        }
+        right.onmousedown = function () {
+            m+=1;
+            if(m>12){
+                y+=1;
+                m=1
+            }
+            generateDate(y, m,day)
+        }
+    }
+</script>
+</body>
+</html>
+
